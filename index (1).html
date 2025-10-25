@@ -1,0 +1,1677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Management Portal</title>
+    <style>
+        :root {
+            --color-primary: #2563eb;
+            --color-primary-dark: #1e40af;
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --color-danger: #ef4444;
+            --color-info: #06b6d4;
+            --color-bg: #f8fafc;
+            --color-surface: #ffffff;
+            --color-text: #1e293b;
+            --color-text-secondary: #64748b;
+            --color-border: #e2e8f0;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* Login Screen */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+        }
+
+        .login-box {
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h1 {
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: var(--color-text-secondary);
+        }
+
+        .role-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .role-card {
+            padding: 1.5rem;
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .role-card:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+
+        .role-card.active {
+            border-color: var(--color-primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .role-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--color-text);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--color-primary);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--color-text-secondary);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--color-success);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        /* Dashboard Layout */
+        .dashboard {
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
+
+        .sidebar {
+            width: 260px;
+            background: var(--color-surface);
+            border-right: 1px solid var(--color-border);
+            padding: 1.5rem 0;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: var(--color-text);
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            background: var(--color-bg);
+            color: var(--color-primary);
+        }
+
+        .nav-link.active {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--color-primary);
+            font-weight: 500;
+            border-right: 3px solid var(--color-primary);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--color-surface);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            border-left: 4px solid;
+        }
+
+        .stat-card.blue { border-color: var(--color-primary); }
+        .stat-card.green { border-color: var(--color-success); }
+        .stat-card.yellow { border-color: var(--color-warning); }
+        .stat-card.red { border-color: var(--color-danger); }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-title {
+            color: var(--color-text-secondary);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--color-text);
+        }
+
+        /* Card Component */
+        .card {
+            background: var(--color-surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        th {
+            background: var(--color-bg);
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        tr:hover {
+            background: var(--color-bg);
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--color-success);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--color-warning);
+        }
+
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--color-danger);
+        }
+
+        .badge-info {
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--color-info);
+        }
+
+        /* Schedule Grid */
+        .schedule-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .schedule-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--color-bg);
+            border-radius: var(--radius);
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .schedule-time {
+            font-weight: 600;
+            color: var(--color-primary);
+            min-width: 80px;
+        }
+
+        .schedule-details h4 {
+            margin-bottom: 0.25rem;
+        }
+
+        .schedule-details p {
+            color: var(--color-text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Grid Layout */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Assignment Card */
+        .assignment-card {
+            padding: 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+        }
+
+        .assignment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.5rem;
+        }
+
+        .assignment-title {
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .assignment-meta {
+            color: var(--color-text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--radius);
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--color-border);
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--color-text-secondary);
+        }
+
+        /* Notification Badge */
+        .notification-badge {
+            position: relative;
+        }
+
+        .notification-badge::after {
+            content: attr(data-count);
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--color-danger);
+            color: white;
+            border-radius: 10px;
+            padding: 2px 6px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        /* Progress Bar */
+        .progress {
+            height: 8px;
+            background: var(--color-border);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--color-success);
+            transition: width 0.3s;
+        }
+
+        /* Attendance Grid */
+        .attendance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .attendance-day {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .attendance-day.present {
+            background: var(--color-success);
+            color: white;
+        }
+
+        .attendance-day.absent {
+            background: var(--color-danger);
+            color: white;
+        }
+
+        .attendance-day.pending {
+            background: var(--color-border);
+            color: var(--color-text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -260px;
+                transition: left 0.3s;
+                z-index: 99;
+                height: 100vh;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .role-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .login-box {
+                padding: 2rem;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Page Title */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--color-text-secondary);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .quick-action-btn {
+            flex: 1;
+            min-width: 150px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <h1>🎓 School Portal</h1>
+                <p>Welcome back! Please login to continue</p>
+            </div>
+
+            <div class="role-selector">
+                <div class="role-card active" data-role="student">
+                    <div class="role-icon">👨‍🎓</div>
+                    <div>Student</div>
+                </div>
+                <div class="role-card" data-role="teacher">
+                    <div class="role-icon">👩‍🏫</div>
+                    <div>Teacher</div>
+                </div>
+                <div class="role-card" data-role="admin">
+                    <div class="role-icon">👨‍💼</div>
+                    <div>Admin</div>
+                </div>
+                <div class="role-card" data-role="parent">
+                    <div class="role-icon">👪</div>
+                    <div>Parent</div>
+                </div>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">Email / ID</label>
+                    <input type="text" class="form-control" id="userId" placeholder="Enter your email or ID" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="hidden">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    🎓 School Management Portal
+                </div>
+                <div class="user-info">
+                    <div class="notification-badge" data-count="3">
+                        🔔
+                    </div>
+                    <div class="user-avatar" id="userAvatar">JD</div>
+                    <span id="userName">John Doe</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard">
+            <!-- Sidebar -->
+            <aside class="sidebar" id="sidebar">
+                <nav>
+                    <ul class="nav-menu" id="navMenu">
+                        <!-- Dynamic menu items will be inserted here -->
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Student Dashboard -->
+                <div id="studentDashboard" class="content-section">
+                    <div class="page-header">
+                        <h1 class="page-title">Student Dashboard</h1>
+                        <p class="page-subtitle">Welcome back! Here's your overview</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card blue">
+                            <div class="stat-header">
+                                <span class="stat-title">Current GPA</span>
+                                <span>📊</span>
+                            </div>
+                            <div class="stat-value">3.85</div>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: 96%"></div>
+                            </div>
+                        </div>
+                        <div class="stat-card green">
+                            <div class="stat-header">
+                                <span class="stat-title">Attendance</span>
+                                <span>✅</span>
+                            </div>
+                            <div class="stat-value">92%</div>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: 92%"></div>
+                            </div>
+                        </div>
+                        <div class="stat-card yellow">
+                            <div class="stat-header">
+                                <span class="stat-title">Assignments Due</span>
+                                <span>📝</span>
+                            </div>
+                            <div class="stat-value">5</div>
+                        </div>
+                        <div class="stat-card red">
+                            <div class="stat-header">
+                                <span class="stat-title">Upcoming Exams</span>
+                                <span>📚</span>
+                            </div>
+                            <div class="stat-value">2</div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Today's Schedule</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="schedule-grid">
+                                    <div class="schedule-item">
+                                        <div class="schedule-time">9:00 AM</div>
+                                        <div class="schedule-details">
+                                            <h4>Mathematics</h4>
+                                            <p>Room 201 - Prof. Smith</p>
+                                        </div>
+                                    </div>
+                                    <div class="schedule-item">
+                                        <div class="schedule-time">11:00 AM</div>
+                                        <div class="schedule-details">
+                                            <h4>Physics</h4>
+                                            <p>Lab 3 - Prof. Johnson</p>
+                                        </div>
+                                    </div>
+                                    <div class="schedule-item">
+                                        <div class="schedule-time">2:00 PM</div>
+                                        <div class="schedule-details">
+                                            <h4>English Literature</h4>
+                                            <p>Room 105 - Prof. Williams</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Recent Grades</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Subject</th>
+                                                <th>Assignment</th>
+                                                <th>Grade</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Math</td>
+                                                <td>Calculus Test</td>
+                                                <td><span class="badge badge-success">A</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Physics</td>
+                                                <td>Lab Report</td>
+                                                <td><span class="badge badge-success">A-</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>English</td>
+                                                <td>Essay</td>
+                                                <td><span class="badge badge-info">B+</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Pending Assignments</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="assignment-card">
+                                <div class="assignment-header">
+                                    <div>
+                                        <div class="assignment-title">Math - Chapter 5 Problems</div>
+                                        <div class="assignment-meta">Due: Oct 28, 2025</div>
+                                    </div>
+                                    <span class="badge badge-warning">Due Soon</span>
+                                </div>
+                                <p>Complete exercises 1-20 from Chapter 5</p>
+                            </div>
+                            <div class="assignment-card">
+                                <div class="assignment-header">
+                                    <div>
+                                        <div class="assignment-title">Physics - Lab Report</div>
+                                        <div class="assignment-meta">Due: Oct 30, 2025</div>
+                                    </div>
+                                    <span class="badge badge-info">Upcoming</span>
+                                </div>
+                                <p>Submit lab report on Newton's Laws experiment</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Teacher Dashboard -->
+                <div id="teacherDashboard" class="content-section">
+                    <div class="page-header">
+                        <h1 class="page-title">Teacher Dashboard</h1>
+                        <p class="page-subtitle">Manage your classes and students</p>
+                    </div>
+
+                    <div class="quick-actions">
+                        <button class="btn btn-primary quick-action-btn" onclick="openModal('attendanceModal')">📋 Take Attendance</button>
+                        <button class="btn btn-success quick-action-btn" onclick="openModal('gradeModal')">📝 Enter Grades</button>
+                        <button class="btn btn-secondary quick-action-btn" onclick="openModal('assignmentModal')">➕ New Assignment</button>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card blue">
+                            <div class="stat-header">
+                                <span class="stat-title">Total Students</span>
+                                <span>👥</span>
+                            </div>
+                            <div class="stat-value">156</div>
+                        </div>
+                        <div class="stat-card green">
+                            <div class="stat-header">
+                                <span class="stat-title">Classes</span>
+                                <span>📚</span>
+                            </div>
+                            <div class="stat-value">5</div>
+                        </div>
+                        <div class="stat-card yellow">
+                            <div class="stat-header">
+                                <span class="stat-title">Pending Grades</span>
+                                <span>⏳</span>
+                            </div>
+                            <div class="stat-value">23</div>
+                        </div>
+                        <div class="stat-card red">
+                            <div class="stat-header">
+                                <span class="stat-title">Avg Attendance</span>
+                                <span>✅</span>
+                            </div>
+                            <div class="stat-value">89%</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">My Classes</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Class</th>
+                                            <th>Grade</th>
+                                            <th>Students</th>
+                                            <th>Schedule</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Mathematics 101</td>
+                                            <td>10th</td>
+                                            <td>32</td>
+                                            <td>Mon, Wed, Fri - 9:00 AM</td>
+                                            <td>
+                                                <div class="action-buttons">
+                                                    <button class="btn btn-sm btn-primary">View</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Algebra Advanced</td>
+                                            <td>11th</td>
+                                            <td>28</td>
+                                            <td>Tue, Thu - 10:30 AM</td>
+                                            <td>
+                                                <div class="action-buttons">
+                                                    <button class="btn btn-sm btn-primary">View</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Calculus</td>
+                                            <td>12th</td>
+                                            <td>25</td>
+                                            <td>Mon, Wed - 2:00 PM</td>
+                                            <td>
+                                                <div class="action-buttons">
+                                                    <button class="btn btn-sm btn-primary">View</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Recent Submissions</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="assignment-card">
+                                    <div class="assignment-header">
+                                        <div>
+                                            <div class="assignment-title">Sarah Johnson - Math Assignment</div>
+                                            <div class="assignment-meta">Submitted: Oct 24, 2025</div>
+                                        </div>
+                                        <span class="badge badge-warning">Pending</span>
+                                    </div>
+                                </div>
+                                <div class="assignment-card">
+                                    <div class="assignment-header">
+                                        <div>
+                                            <div class="assignment-title">Mike Brown - Quiz 3</div>
+                                            <div class="assignment-meta">Submitted: Oct 23, 2025</div>
+                                        </div>
+                                        <span class="badge badge-success">Graded</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Today's Schedule</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="schedule-grid">
+                                    <div class="schedule-item">
+                                        <div class="schedule-time">9:00 AM</div>
+                                        <div class="schedule-details">
+                                            <h4>Math 101</h4>
+                                            <p>Room 201 - 32 students</p>
+                                        </div>
+                                    </div>
+                                    <div class="schedule-item">
+                                        <div class="schedule-time">11:00 AM</div>
+                                        <div class="schedule-details">
+                                            <h4>Algebra Advanced</h4>
+                                            <p>Room 203 - 28 students</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Dashboard -->
+                <div id="adminDashboard" class="content-section">
+                    <div class="page-header">
+                        <h1 class="page-title">Admin Dashboard</h1>
+                        <p class="page-subtitle">School-wide management and analytics</p>
+                    </div>
+
+                    <div class="quick-actions">
+                        <button class="btn btn-primary quick-action-btn" onclick="openModal('studentModal')">👨‍🎓 Add Student</button>
+                        <button class="btn btn-success quick-action-btn" onclick="openModal('teacherModal')">👩‍🏫 Add Teacher</button>
+                        <button class="btn btn-secondary quick-action-btn">📊 Generate Report</button>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card blue">
+                            <div class="stat-header">
+                                <span class="stat-title">Total Students</span>
+                                <span>👥</span>
+                            </div>
+                            <div class="stat-value">1,245</div>
+                            <small style="color: var(--color-success)">↑ 5% from last year</small>
+                        </div>
+                        <div class="stat-card green">
+                            <div class="stat-header">
+                                <span class="stat-title">Total Teachers</span>
+                                <span>👨‍🏫</span>
+                            </div>
+                            <div class="stat-value">87</div>
+                        </div>
+                        <div class="stat-card yellow">
+                            <div class="stat-header">
+                                <span class="stat-title">Active Classes</span>
+                                <span>📚</span>
+                            </div>
+                            <div class="stat-value">156</div>
+                        </div>
+                        <div class="stat-card red">
+                            <div class="stat-header">
+                                <span class="stat-title">Avg Attendance</span>
+                                <span>✅</span>
+                            </div>
+                            <div class="stat-value">91%</div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Recent Enrollments</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Student Name</th>
+                                                <th>Grade</th>
+                                                <th>Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Emma Wilson</td>
+                                                <td>9th</td>
+                                                <td>Oct 20, 2025</td>
+                                            </tr>
+                                            <tr>
+                                                <td>James Miller</td>
+                                                <td>10th</td>
+                                                <td>Oct 19, 2025</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Sophia Davis</td>
+                                                <td>11th</td>
+                                                <td>Oct 18, 2025</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Department Overview</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="assignment-card">
+                                    <div class="assignment-header">
+                                        <div>
+                                            <div class="assignment-title">Science Department</div>
+                                            <div class="assignment-meta">12 Teachers • 345 Students</div>
+                                        </div>
+                                        <span class="badge badge-success">Active</span>
+                                    </div>
+                                </div>
+                                <div class="assignment-card">
+                                    <div class="assignment-header">
+                                        <div>
+                                            <div class="assignment-title">Mathematics Department</div>
+                                            <div class="assignment-meta">10 Teachers • 298 Students</div>
+                                        </div>
+                                        <span class="badge badge-success">Active</span>
+                                    </div>
+                                </div>
+                                <div class="assignment-card">
+                                    <div class="assignment-header">
+                                        <div>
+                                            <div class="assignment-title">Arts Department</div>
+                                            <div class="assignment-meta">8 Teachers • 167 Students</div>
+                                        </div>
+                                        <span class="badge badge-success">Active</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Staff Directory</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Department</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Prof. John Smith</td>
+                                            <td>Mathematics</td>
+                                            <td>j.smith@school.edu</td>
+                                            <td>(555) 123-4567</td>
+                                            <td><span class="badge badge-success">Active</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Prof. Sarah Johnson</td>
+                                            <td>Physics</td>
+                                            <td>s.johnson@school.edu</td>
+                                            <td>(555) 234-5678</td>
+                                            <td><span class="badge badge-success">Active</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Prof. Mike Williams</td>
+                                            <td>Chemistry</td>
+                                            <td>m.williams@school.edu</td>
+                                            <td>(555) 345-6789</td>
+                                            <td><span class="badge badge-warning">On Leave</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Parent Dashboard -->
+                <div id="parentDashboard" class="content-section">
+                    <div class="page-header">
+                        <h1 class="page-title">Parent Dashboard</h1>
+                        <p class="page-subtitle">Monitor your child's progress</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">My Children</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="assignment-card">
+                                <div class="assignment-header">
+                                    <div>
+                                        <div class="assignment-title">Emma Johnson</div>
+                                        <div class="assignment-meta">Grade 10 - Section A</div>
+                                    </div>
+                                    <button class="btn btn-sm btn-primary">View Details</button>
+                                </div>
+                            </div>
+                            <div class="assignment-card">
+                                <div class="assignment-header">
+                                    <div>
+                                        <div class="assignment-title">Michael Johnson</div>
+                                        <div class="assignment-meta">Grade 8 - Section B</div>
+                                    </div>
+                                    <button class="btn btn-sm btn-primary">View Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Emma's Performance</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="stats-grid">
+                                    <div class="stat-card blue">
+                                        <div class="stat-header">
+                                            <span class="stat-title">GPA</span>
+                                            <span>📊</span>
+                                        </div>
+                                        <div class="stat-value">3.8</div>
+                                    </div>
+                                    <div class="stat-card green">
+                                        <div class="stat-header">
+                                            <span class="stat-title">Attendance</span>
+                                            <span>✅</span>
+                                        </div>
+                                        <div class="stat-value">94%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Recent Grades</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Subject</th>
+                                                <th>Assignment</th>
+                                                <th>Grade</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Math</td>
+                                                <td>Chapter Test</td>
+                                                <td><span class="badge badge-success">A</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Science</td>
+                                                <td>Lab Work</td>
+                                                <td><span class="badge badge-success">A-</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>English</td>
+                                                <td>Essay</td>
+                                                <td><span class="badge badge-info">B+</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Upcoming Parent-Teacher Meetings</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="schedule-grid">
+                                <div class="schedule-item">
+                                    <div class="schedule-time">Nov 2</div>
+                                    <div class="schedule-details">
+                                        <h4>Math Teacher Meeting</h4>
+                                        <p>Prof. Smith - 3:00 PM</p>
+                                    </div>
+                                </div>
+                                <div class="schedule-item">
+                                    <div class="schedule-time">Nov 5</div>
+                                    <div class="schedule-details">
+                                        <h4>Science Teacher Meeting</h4>
+                                        <p>Prof. Johnson - 4:00 PM</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Fee Payment Status</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Student</th>
+                                            <th>Fee Type</th>
+                                            <th>Amount</th>
+                                            <th>Due Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Emma Johnson</td>
+                                            <td>Tuition - Q2</td>
+                                            <td>$2,500</td>
+                                            <td>Nov 1, 2025</td>
+                                            <td><span class="badge badge-success">Paid</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Michael Johnson</td>
+                                            <td>Tuition - Q2</td>
+                                            <td>$2,200</td>
+                                            <td>Nov 1, 2025</td>
+                                            <td><span class="badge badge-warning">Pending</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="attendanceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Mark Attendance</h3>
+                <button class="close-modal" onclick="closeModal('attendanceModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Select Class</label>
+                    <select class="form-control">
+                        <option>Mathematics 101</option>
+                        <option>Algebra Advanced</option>
+                        <option>Calculus</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Date</label>
+                    <input type="date" class="form-control" value="2025-10-25">
+                </div>
+                <div class="attendance-grid">
+                    <div class="attendance-day present" title="Present">P</div>
+                    <div class="attendance-day absent" title="Absent">A</div>
+                    <div class="attendance-day pending" title="Pending">?</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('attendanceModal')">Cancel</button>
+                <button class="btn btn-success">Save Attendance</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="gradeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Enter Grades</h3>
+                <button class="close-modal" onclick="closeModal('gradeModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Select Class</label>
+                    <select class="form-control">
+                        <option>Mathematics 101</option>
+                        <option>Algebra Advanced</option>
+                        <option>Calculus</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Assignment/Test</label>
+                    <input type="text" class="form-control" placeholder="e.g., Chapter 5 Quiz">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Student</label>
+                    <select class="form-control">
+                        <option>Select Student</option>
+                        <option>John Doe</option>
+                        <option>Jane Smith</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Grade</label>
+                    <input type="text" class="form-control" placeholder="e.g., A, 95, B+">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('gradeModal')">Cancel</button>
+                <button class="btn btn-success">Save Grade</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="assignmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create Assignment</h3>
+                <button class="close-modal" onclick="closeModal('assignmentModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Class</label>
+                    <select class="form-control">
+                        <option>Mathematics 101</option>
+                        <option>Algebra Advanced</option>
+                        <option>Calculus</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Title</label>
+                    <input type="text" class="form-control" placeholder="Assignment title">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" rows="4" placeholder="Assignment description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Due Date</label>
+                    <input type="date" class="form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('assignmentModal')">Cancel</button>
+                <button class="btn btn-primary">Create Assignment</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="studentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Student</h3>
+                <button class="close-modal" onclick="closeModal('studentModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-control" placeholder="Student full name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Grade</label>
+                    <select class="form-control">
+                        <option>Select Grade</option>
+                        <option>9th Grade</option>
+                        <option>10th Grade</option>
+                        <option>11th Grade</option>
+                        <option>12th Grade</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" placeholder="student@email.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Parent Email</label>
+                    <input type="email" class="form-control" placeholder="parent@email.com">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('studentModal')">Cancel</button>
+                <button class="btn btn-primary">Add Student</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="teacherModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Teacher</h3>
+                <button class="close-modal" onclick="closeModal('teacherModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-control" placeholder="Teacher full name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Department</label>
+                    <select class="form-control">
+                        <option>Select Department</option>
+                        <option>Mathematics</option>
+                        <option>Science</option>
+                        <option>Arts</option>
+                        <option>Sports</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" placeholder="teacher@school.edu">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone</label>
+                    <input type="tel" class="form-control" placeholder="(555) 123-4567">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('teacherModal')">Cancel</button>
+                <button class="btn btn-primary">Add Teacher</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Role configurations
+        const roleConfigs = {
+            student: {
+                name: 'Student',
+                menus: [
+                    { id: 'studentDashboard', icon: '🏠', text: 'Dashboard' },
+                    { id: 'studentSchedule', icon: '📅', text: 'My Schedule' },
+                    { id: 'studentGrades', icon: '📊', text: 'Grades' },
+                    { id: 'studentAssignments', icon: '📝', text: 'Assignments' },
+                    { id: 'studentAttendance', icon: '✅', text: 'Attendance' }
+                ]
+            },
+            teacher: {
+                name: 'Teacher',
+                menus: [
+                    { id: 'teacherDashboard', icon: '🏠', text: 'Dashboard' },
+                    { id: 'teacherClasses', icon: '📚', text: 'My Classes' },
+                    { id: 'teacherStudents', icon: '👥', text: 'Students' },
+                    { id: 'teacherGrades', icon: '📝', text: 'Grade Book' },
+                    { id: 'teacherAttendance', icon: '✅', text: 'Attendance' }
+                ]
+            },
+            admin: {
+                name: 'Administrator',
+                menus: [
+                    { id: 'adminDashboard', icon: '🏠', text: 'Dashboard' },
+                    { id: 'adminStudents', icon: '👨‍🎓', text: 'Students' },
+                    { id: 'adminTeachers', icon: '👩‍🏫', text: 'Teachers' },
+                    { id: 'adminClasses', icon: '📚', text: 'Classes' },
+                    { id: 'adminReports', icon: '📊', text: 'Reports' },
+                    { id: 'adminSettings', icon: '⚙️', text: 'Settings' }
+                ]
+            },
+            parent: {
+                name: 'Parent',
+                menus: [
+                    { id: 'parentDashboard', icon: '🏠', text: 'Dashboard' },
+                    { id: 'parentChildren', icon: '👨‍👩‍👧‍👦', text: 'My Children' },
+                    { id: 'parentGrades', icon: '📊', text: 'Grades' },
+                    { id: 'parentAttendance', icon: '✅', text: 'Attendance' },
+                    { id: 'parentFees', icon: '💰', text: 'Fee Payment' },
+                    { id: 'parentMeetings', icon: '📅', text: 'Meetings' }
+                ]
+            }
+        };
+
+        let currentRole = 'student';
+
+        // Role selection
+        document.querySelectorAll('.role-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.role-card').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                currentRole = this.dataset.role;
+            });
+        });
+
+        // Login form
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const userId = document.getElementById('userId').value;
+            const password = document.getElementById('password').value;
+
+            if (userId && password) {
+                // Hide login, show dashboard
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+
+                // Setup dashboard for role
+                setupDashboard(currentRole);
+            }
+        });
+
+        function setupDashboard(role) {
+            const config = roleConfigs[role];
+            const navMenu = document.getElementById('navMenu');
+            const userName = document.getElementById('userName');
+            const userAvatar = document.getElementById('userAvatar');
+
+            // Update user info
+            userName.textContent = config.name + ' User';
+            userAvatar.textContent = config.name.substring(0, 2).toUpperCase();
+
+            // Build navigation menu
+            navMenu.innerHTML = '';
+            config.menus.forEach((menu, index) => {
+                const li = document.createElement('li');
+                li.className = 'nav-item';
+                
+                const link = document.createElement('a');
+                link.className = 'nav-link' + (index === 0 ? ' active' : '');
+                link.innerHTML = `${menu.icon} ${menu.text}`;
+                link.onclick = () => showSection(menu.id);
+                
+                li.appendChild(link);
+                navMenu.appendChild(li);
+            });
+
+            // Show first section
+            showSection(config.menus[0].id);
+        }
+
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Show selected section
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.classList.add('active');
+            }
+
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Close modal on outside click
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+            });
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Demo credentials helper
+            console.log('Demo Login Credentials:');
+            console.log('Any email/password combination will work');
+            console.log('Select a role and click Login');
+        });
+    </script>
+</body>
+</html>
